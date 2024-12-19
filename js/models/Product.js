@@ -3,11 +3,11 @@ function Product(name, price, stock) {
     this.name = name;
     this.price = price;
     this.stock = stock;
-    this.createdAt = newDate();
+    this.createdAt = new Date();
 }
 
 Product.prototype.updateStock = function(quantity) {
-// Actualiza el stock y valida que no sea negativo
+    
     if (this.stock + quantity < 0) {
         throw new Error('Datos inválidos');
     }
@@ -16,7 +16,6 @@ Product.prototype.updateStock = function(quantity) {
 }
 
 Product.prototype.getFormattedPrice = function() {
-    // Retorna el precio formateado como moneda (S/ 1,500.00)
 
     const formatter = new Intl.NumberFormat('es-PE', { 
         style: 'currency', 
@@ -27,13 +26,26 @@ Product.prototype.getFormattedPrice = function() {
 };
 
 Product.prototype.getProductInfo = function() {
-    // retorna: Pelota Adidas - S/ 389.00 (Stock: 14)
-    return `${this.name} - ${this.getFormattedPrice()} (Stock: ${this.stock})`;
+    
+    return {
+        name: this.name,
+        precio: this.getFormattedPrice(),
+        stock: this.stock
+    };
 };
 
-Product.prototype.renderUI = function() {
-    // retornar un elemento HTML `li` con la información del producto
-    const li = document.createElement('li');
-    li.textContent = this.getProductInfo();
-    return li;
+Product.prototype.renderUI = function(index) {
+    
+    const {name, precio, stock} = this.getProductInfo();
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <th>${index}</th>
+        <td>${name}</td>
+        <td>${precio}</td>
+        <td>${stock}</td>
+        `;
+
+    return row;
 };
