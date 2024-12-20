@@ -17,12 +17,27 @@ Customer.prototype.updateEmail = function(email) {
 
 Customer.prototype.getCustomerInfo = function() {
     // retorna: Ysrael Rojas - yrra.rojas@gmail.com
-    return `${this.name} - ${this.email}`;
+    return {
+        name: this.name,
+        email: this.email
+    };
 };
 
-Customer.prototype.renderUI = function() {
-    // retornar un elemento HTML `li` con la información del cliente
-    const li = document.createElement('li');
-    li.textContent = this.getCustomerInfo();
-    return li;
+Customer.prototype.renderUI = function(index) {
+
+    const {name, email} = this.getCustomerInfo();
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <th>${index}</th>
+        <td>${name}</td>
+        <td>${email}</td>
+        <td d-flex justify-content-center align-items-center>
+            <button class="btn btn-danger btn-sm" onclick="eliminarCliente(${index})"><i class="bi bi-trash"></i></button>
+            <button class="btn btn-primary btn-sm ms-2" onclick="editarCliente(${index})"><i class="bi bi-pencil"></i></button>
+        </td>
+        `;
+
+    return row;
 };

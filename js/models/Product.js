@@ -45,6 +45,10 @@ Product.prototype.renderUI = function(index) {
         <td>${name}</td>
         <td>${precio}</td>
         <td>${stock}</td>
+        <td d-flex justify-content-center align-items-center>
+            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+            <button class="btn btn-primary btn-sm ms-2"><i class="bi bi-pencil"></i></button>
+        </td>
         `;
 
     return row;
