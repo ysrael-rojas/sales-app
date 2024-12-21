@@ -7,14 +7,14 @@ function Customer(name, email) {
 }
 
 Customer.prototype.updateCustomer = function(name,email) {
-   /*  
-    if (!email || !email.includes('@')) {
-        throw new Error('Datos inválidos');
-    } */
-
+  
     this.name = name;
     this.email = email;
 };
+
+Customer.prototype.deleteCustomer = function(id) {
+    
+}
 
 Customer.prototype.getCustomerInfo = function() {
 

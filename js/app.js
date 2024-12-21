@@ -1,135 +1,130 @@
-const $formProduct = document.getElementById('form-product');
-const $formCustomer = document.getElementById('form-customer');
+const $formProduct = document.getElementById("form-product");
+const $formCustomer = document.getElementById("form-customer");
 
-const tableBodyProduct = document.getElementById('tableBodyProduct');
-const tableBodyCustomer = document.getElementById('tableBodyCustomer');
+const tableBodyProduct = document.getElementById("tableBodyProduct");
+const tableBodyCustomer = document.getElementById("tableBodyCustomer");
 
 let productList = [];
 let customerList = [];
 let customerEdit = null;
 
 function handleNewProduct(event) {
+  	event.preventDefault();
 
-    event.preventDefault();
+	const form = event.target;
 
-    const form = event.target;
+	const product = new Product(
+		form.nameProduct.value,
+		form.precio.value,
+		form.stock.value
+	);
 
-    const product = new Product(
-        form.nameProduct.value, 
-        form.precio.value, 
-        form.stock.value
-    );
+	productList.push(product);
 
-    productList.push(product);
+	viewProductList();
 
-    viewProductList();
-
-    form.reset();
+	form.reset();
 }
 
 function handleNewCustomer(event) {
+	event.preventDefault();
 
-    event.preventDefault();
+	const form = event.target;
 
-    const form = event.target;
+	if (!customerFieldsValidator(form.nameCustomer.value, form.email.value)) {
+		Swal.fire("Error", "Por favor ingresa todos los campos", "error");
+		return;
+	}
 
-    const customer = new Customer(
-        form.nameCustomer.value,
-        form.email.value
-    );
+	const customer = new Customer(form.nameCustomer.value, form.email.value);
 
-    customerList.push(customer);
+	customerList.push(customer);
 
-    viewCustomerList();
+	viewCustomerList();
 
-    form.reset();
+	form.reset();
 }
 
 function viewProductList() {
-    
-    tableBodyProduct.innerHTML = '';
-    
-    let index = 1;
-    
-    productList.forEach((product) => {
-        tableBodyProduct.appendChild(product.renderUI(index));
-        index++;
-    });
+	tableBodyProduct.innerHTML = "";
+
+	let index = 1;
+
+	productList.forEach((product) => {
+		tableBodyProduct.appendChild(product.renderUI(index));
+		index++;
+	});
 }
 
 function viewCustomerList() {
+	tableBodyCustomer.innerHTML = "";
 
-    tableBodyCustomer.innerHTML = '';
+	let index = 1;
 
-    let index = 1;
-
-    customerList.forEach((customer) => {
-        tableBodyCustomer.appendChild(customer.renderUI(index));
-        index++;
-    });
-
+	customerList.forEach((customer) => {
+		tableBodyCustomer.appendChild(customer.renderUI(index));
+		index++;
+	});
 }
 
 function editarCliente(index) {
 
-    customerEdit = index-1;
-    const customer = customerList[index-1];
-    document.getElementById('nameModal').value = customer.name;
-    document.getElementById('emailModal').value = customer.email;
-    const modal = new bootstrap.Modal(document.getElementById('modalEdit'));
-    modal.show();
+	customerEdit = index - 1;
+	const customer = customerList[index - 1];
+	document.getElementById("nameModal").value = customer.name;
+	document.getElementById("emailModal").value = customer.email;
+	const modal = new bootstrap.Modal(document.getElementById("modalEdit"));
+	modal.show();
 }
 
 function eliminarCliente(index) {
+	Swal.fire({
+		title: "¿Estás seguro?",
+		text: "¡Esta acción no se puede deshacer!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonText: "Sí, eliminar",
+		cancelButtonText: "Cancelar",
+		reverseButtons: true,
+	}).then((result) => {
+		if (result.isConfirmed) {
+		customerList.splice(index - 1, 1);
+		viewCustomerList();
+		Swal.fire("Eliminado!", "El cliente ha sido eliminado.", "success");
+		} else {
+		Swal.fire("Cancelado", "La eliminación fue cancelada.", "info");
+		}
+	});
+}
 
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡Esta acción no se puede deshacer!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-            customerList.splice(index-1, 1);
-            viewCustomerList();
-          Swal.fire(
-            'Eliminado!',
-            'El cliente ha sido eliminado.',
-            'success'
-          );
-        } else {
-          Swal.fire(
-            'Cancelado',
-            'La eliminación fue cancelada.',
-            'info'
-          );
-        }
-      });
+function customerFieldsValidator(name, email) {
 
-    
-  }
+  	return !name || !email || !email.includes("@") ? false : true;
+}
 
-// Guardar cambios en el modal
-document.getElementById('guardarCambios').addEventListener('click', () => {
-    const name = document.getElementById('nameModal').value;
-    const email = document.getElementById('emailModal').value;
-    
-    if (!name || !email || !email.includes('@')) {
-      Swal.fire('Error', 'Por favor ingresa todos los campos', 'error');
-      return;
-    }
+function handleUpdateCustomer(event) {
+	const name = document.getElementById("nameModal").value;
+	const email = document.getElementById("emailModal").value;
 
-    const customer = customerList[customerEdit];
-    
-    customer.updateCustomer(name, email);
+	if (!customerFieldsValidator(name, email)) {
+		Swal.fire("Error", "Por favor ingresa todos los campos", "error");
+		return;
+	}
 
-    viewCustomerList();
+	const customer = customerList[customerEdit];
 
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEdit'));
-    modal.hide();
-  });
+	customer.updateCustomer(name, email);
+
+	viewCustomerList();
+
+	const modal = bootstrap.Modal.getInstance(
+		document.getElementById("modalEdit")
+	);
+	modal.hide();
+}
+
+document.getElementById("guardarCambios")
+        .addEventListener("click", handleUpdateCustomer);
 
 $formProduct.addEventListener("submit", handleNewProduct);
 $formCustomer.addEventListener("submit", handleNewCustomer);
