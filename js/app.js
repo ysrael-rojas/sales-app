@@ -23,6 +23,7 @@ function handleNewProduct(event) {
     productList.push(product);
 
     viewProductList();
+    llenarSelectProducto();
 
     form.reset();
 }
@@ -41,6 +42,7 @@ function handleNewCustomer(event) {
     customerList.push(customer);
 
     viewCustomerList();
+    llenarSelectCliente();
 
     form.reset();
 }
@@ -110,6 +112,65 @@ function eliminarCliente(index) {
 
     
   }
+
+  function addDetailSale(idCustomer, idProduct, quantity) {
+
+    const customer = customerList.find(idCustomer);
+    const product = productList.find(idProduct);
+
+    if (!customer) {
+      throw new Error('Cliente no encontrado');
+    }
+
+    if (!product) {
+      throw new Error('Producto no encontrado');
+    }
+    
+    const sale = new Sale(customer);
+    sale.addProduct(product, quantity);
+    console.log(sale);
+
+  }
+
+  function llenarSelectProducto() {
+     // Obtener referencia al select
+     const selectElement = document.getElementById('productSelect');
+
+     // Agregar un placeholder
+     const placeholderOption = document.createElement('option');
+     placeholderOption.textContent = 'Elige un producto...';
+     placeholderOption.disabled = true;
+     placeholderOption.selected = true;
+     selectElement.appendChild(placeholderOption);
+ 
+     // Llenar el select con datos del array
+     productList.forEach(product => {
+       const option = document.createElement('option');
+       option.value = product.id; // Asignar el ID como valor
+       option.textContent = product.name; // Asignar el nombre como texto
+       selectElement.appendChild(option);
+     });
+  }
+
+  function llenarSelectCliente() {
+    // Obtener referencia al select
+    const selectElement = document.getElementById('customerSelect');
+
+    // Agregar un placeholder
+    const placeholderOption = document.createElement('option');
+    placeholderOption.textContent = 'Elige un producto...';
+    placeholderOption.disabled = true;
+    placeholderOption.selected = true;
+    selectElement.appendChild(placeholderOption);
+
+    // Llenar el select con datos del array
+    customerList.forEach(customer => {
+      const option = document.createElement('option');
+      option.value = customer.id; // Asignar el ID como valor
+      option.textContent = customer.name; // Asignar el nombre como texto
+      selectElement.appendChild(option);
+    });
+ }
 
 // Guardar cambios en el modal
 document.getElementById('guardarCambios').addEventListener('click', () => {
