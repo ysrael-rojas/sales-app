@@ -6,17 +6,18 @@ function Customer(name, email) {
     this.createdAt = new Date();
 }
 
-Customer.prototype.updateEmail = function(email) {
-    // Actualiza el email
+Customer.prototype.updateCustomer = function(name,email) {
+   /*  
     if (!email || !email.includes('@')) {
         throw new Error('Datos inválidos');
-    }
+    } */
 
+    this.name = name;
     this.email = email;
 };
 
 Customer.prototype.getCustomerInfo = function() {
-    // retorna: Ysrael Rojas - yrra.rojas@gmail.com
+
     return {
         name: this.name,
         email: this.email

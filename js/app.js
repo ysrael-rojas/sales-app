@@ -116,15 +116,14 @@ document.getElementById('guardarCambios').addEventListener('click', () => {
     const name = document.getElementById('nameModal').value;
     const email = document.getElementById('emailModal').value;
     
-    if (!name || !email) {
+    if (!name || !email || !email.includes('@')) {
       Swal.fire('Error', 'Por favor ingresa todos los campos', 'error');
       return;
     }
 
-    // Actualizar cliente en el array
     const customer = customerList[customerEdit];
-    customer.name = name;
-    customer.email = email;
+    
+    customer.updateCustomer(name, email);
 
     viewCustomerList();
 
