@@ -19,14 +19,24 @@ Customer.prototype.deleteCustomer = function(id) {
 Customer.prototype.getCustomerInfo = function() {
 
     return {
+        id: this.id,
         name: this.name,
         email: this.email
     };
 };
 
+Customer.prototype.removeCustomer = function(id, customerList) {
+
+    const indexDelete = customerList.findIndex( (customer) => customer.id === id );
+
+    if (indexDelete !== -1) {
+        customerList.splice(indexDelete, 1);
+    }
+}
+
 Customer.prototype.renderUI = function(index) {
 
-    const {name, email} = this.getCustomerInfo();
+    const {id, name, email} = this.getCustomerInfo();
 
     const row = document.createElement("tr");
 
@@ -35,8 +45,8 @@ Customer.prototype.renderUI = function(index) {
         <td>${name}</td>
         <td>${email}</td>
         <td d-flex justify-content-center align-items-center>
-            <button class="btn btn-danger btn-sm" onclick="eliminarCliente(${index})"><i class="bi bi-trash"></i></button>
-            <button class="btn btn-primary btn-sm ms-2" onclick="editarCliente(${index})"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCustomer(${id}, ${index})"><i class="bi bi-trash"></i></button>
+            <button class="btn btn-primary btn-sm ms-2" onclick="showModalUpdateCustomer(${index})"><i class="bi bi-pencil"></i></button>
         </td>
         `;
 

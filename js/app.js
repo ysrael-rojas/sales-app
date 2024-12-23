@@ -6,7 +6,8 @@ const tableBodyCustomer = document.getElementById("tableBodyCustomer");
 
 let productList = [];
 let customerList = [];
-let customerEdit = null;
+let indexEdit = null;
+let indexEditProduct = null;
 
 function handleNewProduct(event) {
   	event.preventDefault();
@@ -67,17 +68,28 @@ function viewCustomerList() {
 	});
 }
 
-function editarCliente(index) {
+function showModalUpdateCustomer(index) {
 
-	customerEdit = index - 1;
-	const customer = customerList[index - 1];
-	document.getElementById("nameModal").value = customer.name;
-	document.getElementById("emailModal").value = customer.email;
+	indexEdit = index - 1;
+	const {name, email} = customerList[indexEdit];
+	document.getElementById("nameModal").value = name;
+	document.getElementById("emailModal").value = email;
 	const modal = new bootstrap.Modal(document.getElementById("modalEdit"));
 	modal.show();
 }
 
-function eliminarCliente(index) {
+function showModalUpdateProduct(index) {
+
+	indexEditProduct = index - 1;
+	const {name, price, stock} = productList[indexEditProduct];
+	document.getElementById("nameModalProduct").value = name;
+	document.getElementById("priceModalProduct").value = price;
+	document.getElementById("stockModalProduct").value = stock;
+	const modal = new bootstrap.Modal(document.getElementById("modalEditProduct"));
+	modal.show();
+}
+
+function deleteCustomer(id, index) {
 	Swal.fire({
 		title: "¿Estás seguro?",
 		text: "¡Esta acción no se puede deshacer!",
@@ -88,11 +100,45 @@ function eliminarCliente(index) {
 		reverseButtons: true,
 	}).then((result) => {
 		if (result.isConfirmed) {
-		customerList.splice(index - 1, 1);
-		viewCustomerList();
-		Swal.fire("Eliminado!", "El cliente ha sido eliminado.", "success");
+
+			const customerToRemove = customerList[index-1];
+
+			customerToRemove.removeCustomer(id, customerList);
+
+			viewCustomerList();
+
+			Swal.fire("Eliminado!", "El cliente ha sido eliminado.", "success");
+
 		} else {
-		Swal.fire("Cancelado", "La eliminación fue cancelada.", "info");
+
+			Swal.fire("Cancelado", "La eliminación fue cancelada.", "info");
+		}
+	});
+}
+
+function deleteProduct(id, index) {
+	Swal.fire({
+		title: "¿Estás seguro?",
+		text: "¡Esta acción no se puede deshacer!",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonText: "Sí, eliminar",
+		cancelButtonText: "Cancelar",
+		reverseButtons: true,
+	}).then((result) => {
+		if (result.isConfirmed) {
+
+			const productToDelete = productList[index - 1];
+
+			productToDelete.removeProduct(id, productList);
+
+			viewProductList();
+			
+			Swal.fire("Eliminado!", "El producto ha sido eliminado.", "success");
+
+		} else {
+
+			Swal.fire("Cancelado", "La eliminación fue cancelada.", "info");
 		}
 	});
 }
@@ -100,6 +146,11 @@ function eliminarCliente(index) {
 function customerFieldsValidator(name, email) {
 
   	return !name || !email || !email.includes("@") ? false : true;
+}
+
+function productFieldsValidator(name, price, stock) {
+
+	return !name || !price || !stock || price <= 0 || stock < 0 ? false : true;
 }
 
 function handleUpdateCustomer(event) {
@@ -111,7 +162,7 @@ function handleUpdateCustomer(event) {
 		return;
 	}
 
-	const customer = customerList[customerEdit];
+	const customer = customerList[indexEdit];
 
 	customer.updateCustomer(name, email);
 
@@ -123,8 +174,33 @@ function handleUpdateCustomer(event) {
 	modal.hide();
 }
 
+function handleUpdateProduct(event) {
+
+	const name = document.getElementById("nameModalProduct").value;
+	const price = document.getElementById("priceModalProduct").value;
+	const stock = document.getElementById("stockModalProduct").value;
+
+	if (!productFieldsValidator(name, price, stock)) {
+		Swal.fire("Error", "Por favor ingresa todos los campos", "error");
+		return;
+	}
+
+	const product = productList[indexEditProduct];
+
+	product.updateProduct(name, price, stock);
+
+	viewProductList();
+
+	const modal = bootstrap.Modal.getInstance(
+		document.getElementById("modalEditProduct")
+	);
+	modal.hide();
+}
+
 document.getElementById("guardarCambios")
         .addEventListener("click", handleUpdateCustomer);
+document.getElementById("guardarCambiosProduct")
+		.addEventListener("click", handleUpdateProduct);
 
 $formProduct.addEventListener("submit", handleNewProduct);
 $formCustomer.addEventListener("submit", handleNewCustomer);
