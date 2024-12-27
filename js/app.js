@@ -14,6 +14,11 @@ function handleNewProduct(event) {
 
 	const form = event.target;
 
+	if (!productFieldsValidator(form.nameProduct.value,form.precio.value,form.stock.value)) {
+		Swal.fire("Error", "Por favor ingresa todos los campos", "error");
+		return;
+	}
+
 	const product = new Product(
 		form.nameProduct.value,
 		form.precio.value,
@@ -150,7 +155,7 @@ function customerFieldsValidator(name, email) {
 
 function productFieldsValidator(name, price, stock) {
 
-	return !name || !price || !stock || price <= 0 || stock < 0 ? false : true;
+	return !name || !price || !stock || price <= 0 || stock < 0 || isNaN(price) || isNaN(stock) ? false : true;
 }
 
 function handleUpdateCustomer(event) {
