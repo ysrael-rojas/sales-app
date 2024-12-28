@@ -25,6 +25,11 @@
 								Clientes
 							</button>
 						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="sale-tab" data-bs-toggle="tab" data-bs-target="#sale-tab-pane" type="button" role="tab" aria-controls="sale-tab-pane" aria-selected="false">
+								Ventas
+							</button>
+						</li>
 					</ul>
 					<div class="tab-content mt-3" id="myTabContent">
 						<div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
@@ -126,6 +131,85 @@
 										</div>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="sale-tab-pane" role="tabpanel" aria-labelledby="sale-tab" tabindex="0">
+							<div class="row">
+								<dic class="col-4">
+									<div class="card">
+										<div class="card-header">
+											Nueva Venta
+										</div>
+										<div class="card-body">
+											<form id="form-sale">
+												<div class="mb-3">
+													<label for="nameCustomerSale" class="form-label">Cliente:</label>
+													<select id="customerSelect" class="form-select" aria-label="Default select example">
+														<option selected>SELECCIONA CLIENTE</option>
+														<option value="1">One</option>
+														<option value="2">Two</option>
+														<option value="3">Three</option>
+													</select>
+												</div>
+												<div class="mb-3">
+													<label for="nameProductSale" class="form-label">Producto:</label>
+													<select class="form-select" aria-label="Default select example">
+														<option selected>SELECCIONA PRODUCTO</option>
+														<option value="1">One</option>
+														<option value="2">Two</option>
+														<option value="3">Three</option>
+													</select>
+												</div>
+												<div class="mb-3">
+													<label for="quantitySale" class="form-label">Cantidad:</label>
+													<input type="text" class="form-control" id="stock" placeholder="Cantidad a vender"/>
+												</div>
+												<button type="submit" class="btn btn-primary mb-3">
+													Agregar Producto
+												</button>
+											</form>
+											<div class="mb-3">
+												<table class="table">
+													<thead>
+														<tr>
+															<th>#</th>
+															<th>Producto</th>
+															<th>P.U</th>
+															<th>Monto</th>
+															<th>Accion</th>
+														</tr>
+													</thead>
+													<tbody>
+
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</dic>
+								<fic class="col-8">
+									<div class="card">
+										<div class="card-header">
+											Ventas realizadas
+										</div>
+										<div class="card-body">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>#</th>
+														<th>Fecha</th>
+														<th>Cliente</th>
+														<th>Monto</th>
+														<th>Acciones</th>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>	
+										</div>
+									</div>
+								</fic>
 							</div>
 						</div>
 					</div>

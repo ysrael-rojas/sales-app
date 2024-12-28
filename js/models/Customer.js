@@ -52,3 +52,10 @@ Customer.prototype.renderUI = function(index) {
 
     return row;
 };
+
+Customer.prototype.renderSelectUI = function(customers) {
+
+    const select = document.getElementById();
+
+    
+}
